@@ -83,7 +83,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-ser
 .handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
 .sheet-head { padding:10px 1rem; border-bottom:0.5px solid var(--border); flex-shrink:0; }
 .sheet-title { font-size:15px; font-weight:500; margin-bottom:8px; color:var(--text); }
-.search-box { width:100%; padding:8px 12px; border:0.5px solid var(--border); border-radius:var(--radius); font-size:14px; background:var(--surface2); color:var(--text); outline:none; }
+.search-box { width:100%; padding:8px 12px; border:0.5px solid var(--border); border-radius:var(--radius); font-size:16px; background:var(--surface2); color:var(--text); outline:none; }
 .search-box:focus { border-color:var(--red); }
 .results { overflow-y:auto; flex:1; display:flex; flex-direction:column; justify-content:flex-start; }
 .result-item { display:flex; align-items:center; gap:10px; padding:9px 1rem 9px 1.25rem; border-bottom:0.5px solid var(--border); cursor:pointer; position:relative; }
@@ -189,8 +189,9 @@ input, textarea { font-size: 16px !important; touch-action: manipulation; }
     <div class="handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">ポケモンを選択</div>
-      <input class="search-box" id="sq" placeholder="名前（ひらがな可）またはNo.で検索..." oninput="filterPoke(this.value)" style="font-size:16px;" />
+      <input class="search-box" id="sq" placeholder="名前（ひらがな可）またはNo.で検索..." oninput="filterPoke(this.value)" onkeyup="filterPoke(this.value)" onchange="filterPoke(this.value)" oncompositionend="filterPoke(this.value)" style="font-size:16px;" />
     </div>
+    <div id="search-debug" style="font-size:11px;color:#e53935;padding:2px 12px;background:#fff3f3;"></div>
     <div class="results" id="results-body"><div class="loading-msg">名前またはNo.で検索...</div></div>
   </div>
 </div>
@@ -1059,6 +1060,9 @@ function filterPoke(q){
     if(seen.has(dk))return false;
     seen.add(dk);return true;
   }).slice(0,80);
+  // デバッグ表示（後で消せる）
+  const dbg=document.getElementById('search-debug');
+  if(dbg)dbg.textContent='q='+q+' nq='+nq+' hits='+list.length+' total='+ALL_POKE.length;
   renderResults(list);
 }
 function renderResults(list){
