@@ -935,12 +935,12 @@ const FORMS=[
 const ALL_POKE=[
   ...Object.entries(PDATA).map(([id,[name,...types]])=>({
     id:+id, key:String(id), name, types, form:null,
-    searchKeys:[normalizeQ(name)]
+    searchKeys:[normalizeQ(name), name]
   })),
   ...FORMS.map(f=>({
     id:null, key:f.key, name:f.name, types:f.types, form:f.form,
     bsKey:f.key,
-    searchKeys:[normalizeQ(f.name),normalizeQ(f.search||''),...(f.form?[normalizeQ(f.form)]:[]) ]
+    searchKeys:[normalizeQ(f.name), f.name, normalizeQ(f.search||''), f.search||'',...(f.form?[normalizeQ(f.form),f.form]:[]) ]
   }))
 ].sort((a,b)=>{if(a.id&&b.id)return a.id-b.id;if(a.id)return -1;if(b.id)return 1;return 0;});
 
@@ -1050,7 +1050,11 @@ function filterPoke(q){
   const nq=normalizeQ(q);
   const seen=new Set();
   const list=ALL_POKE.filter(p=>{
-    if(!(String(p.id).includes(q)||p.searchKeys.some(k=>k.includes(nq))))return false;
+    const match=String(p.id).includes(q)
+      || p.searchKeys.some(k=>k.includes(nq))
+      || p.searchKeys.some(k=>k.includes(q))
+      || normalizeQ(p.name).includes(nq);
+    if(!match)return false;
     const dk=p.name+'|'+(p.form||'');
     if(seen.has(dk))return false;
     seen.add(dk);return true;
