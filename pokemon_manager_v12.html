@@ -155,6 +155,7 @@ input, textarea { font-size: 16px !important; touch-action: manipulation; }
 </style>
 </head>
 <body>
+<div id="js-error-display" style="position:fixed;top:0;left:0;right:0;background:#fff0f0;color:#c00;font-size:12px;padding:8px;z-index:9999;word-break:break-all;display:block;max-height:40vh;overflow-y:auto;"></div>
 <div id="app">
   <div class="header">
     <div class="header-label">ポケマネ</div>
@@ -225,6 +226,13 @@ input, textarea { font-size: 16px !important; touch-action: manipulation; }
 </div>
 
 <script>
+// グローバルエラーキャッチ
+window.onerror = function(msg, src, line, col, err) {
+  var el = document.getElementById('js-error-display');
+  if(el) el.innerHTML = '<b>JSエラー:</b> ' + msg + '<br>行:' + line + '<br>' + (err?err.stack:'');
+  return false;
+};
+try {
 const TC={normal:'#A8A878',fire:'#F08030',water:'#6890F0',electric:'#F8D030',grass:'#78C850',ice:'#98D8D8',fighting:'#C03028',poison:'#A040A0',ground:'#E0C068',flying:'#A890F0',psychic:'#F85888',bug:'#A8B820',rock:'#B8A038',ghost:'#705898',dragon:'#7038F8',dark:'#705848',steel:'#B8B8D0',fairy:'#EE99AC'};
 const TJ={normal:'ノーマル',fire:'ほのお',water:'みず',electric:'でんき',grass:'くさ',ice:'こおり',fighting:'かくとう',poison:'どく',ground:'じめん',flying:'ひこう',psychic:'エスパー',bug:'むし',rock:'いわ',ghost:'ゴースト',dragon:'ドラゴン',dark:'あく',steel:'はがね',fairy:'フェアリー'};
 const SL=['H','A','B','C','D','S'];
@@ -1191,7 +1199,13 @@ function renderMemoList(q){
   }).join('');
 }
 renderBattle();
-</script>
+
+} catch(e) {
+  (function(){
+    var el = document.getElementById("js-error-display");
+    if(el) el.innerHTML = "<b>初期化エラー:</b> " + e.message + "<br>" + (e.stack||"");
+  })();
+}</script>
 
 <script>
 if('serviceWorker' in navigator){
