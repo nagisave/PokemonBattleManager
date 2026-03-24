@@ -1,0 +1,14 @@
+{
+  "name": "ポケモンバトルマネージャー",
+  "short_name": "ポケマネ",
+  "description": "対戦相手のパーティを記録・メモするアプリ",
+  "start_url": "./pokemon_manager_v12.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#e53935",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
