@@ -150,6 +150,8 @@ body {
 @media not all and (display-mode: standalone) {
   body { padding: 0; }
 }
+/* iOSズーム防止 */
+input, textarea { font-size: 16px !important; touch-action: manipulation; }
 </style>
 </head>
 <body>
@@ -187,7 +189,7 @@ body {
     <div class="handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">ポケモンを選択</div>
-      <input class="search-box" id="sq" placeholder="名前（ひらがな可）またはNo.で検索..." oninput="filterPoke(this.value)" />
+      <input class="search-box" id="sq" placeholder="名前（ひらがな可）またはNo.で検索..." oninput="filterPoke(this.value)" style="font-size:16px;" />
     </div>
     <div class="results" id="results-body"><div class="loading-msg">名前またはNo.で検索...</div></div>
   </div>
@@ -1185,7 +1187,9 @@ renderBattle();
 
 <script>
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.register('sw.js?v=3').then(reg=>{
+    reg.update();
+  }).catch(()=>{});
 }
 </script>
 </body>
